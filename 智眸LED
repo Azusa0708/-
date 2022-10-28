@@ -1,0 +1,19 @@
+import RPi.GPIO as GPIO
+
+class led:
+    def Chose_Gpio(self,gpio):               #选择gpio口
+        self.gpio = gpio
+    def Set_PWM(self,lightness):             #lightness即为占空比 因为范围为0-100 所以无需做线性变化即可作为亮度参数
+        self.lightness=lightness;
+    def work_Begin(self):                    #灯组初始化
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setwarnings(False)
+        GPIO.setup(self.gpio, GPIO.OUT)     #设定gpio口 输出模式
+        pwm = GPIO.PWM(self.gpio, 50)       #设置初始值
+        pwm.start(0)                        #开始
+    def Change_Light(self):
+        pwm.ChangeDutyCycle(int(self.lightness))
+    def Get_Light(self):                    #传回亮度lightness 范围在0-100
+        print(self.lightness)
+    def Work_End(self):                     #结束工作
+        pwm.end()
